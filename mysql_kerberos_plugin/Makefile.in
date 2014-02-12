@@ -1,0 +1,51 @@
+#
+# $Header: $
+#
+#
+
+CPPFLAGS_EXTRA = @@CPPFLAGS_EXTRA@@
+CFLAGS_EXTRA   = @@CFLAGS_EXTRA@@
+LDFLAGS_EXTRA  = @@LDFLAGS_EXTRA@@
+LIBS_EXTRA     = @@LIBS_EXTRA@@
+
+CPPFLAGS    += $(CPPFLAGS_EXTRA)
+CFLAGS      += $(CFLAGS_EXTRA)
+LDFLAGS     += $(LDFLAGS_EXTRA)
+LIBS        += $(LIBS_EXTRA)
+SRC         =  constants.cc kerberos_auth.cc mysql_kerb.cc
+CONF        = mysql_kerb.conf
+PROG        = mysql_kerb.so
+LIBMODE     = 555
+CONFMODE    = 644
+DIRMODE     = 755
+OWNER       = root
+GROUP       = root
+LIBDIR      = $(PREFIX)/lib
+CONFDIR     = $(PREFIX)/etc
+INSTALL     = install-sh
+RM          = /bin/rm
+
+.PHONY: clean 
+ALL: $(PROG)
+
+$(PROG): $(SRC)
+	$(CC) -o $(PROG) $(SRC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+
+clean:
+	$(RM) -f $(PROG) Makefile core core.*
+
+
+install: $(PROG)
+	@@ if [ ! -d $(LIBDIR) ] ; then \
+		echo "creating directory $(LIBDIR)"; \
+		echo "$(INSTALL) -d -o  $(OWNER) -g $(GROUP) -m $(DIRMODE) $(LIBDIR)"; \
+		$(INSTALL) -d -o  $(OWNER) -g $(GROUP) -m $(DIRMODE) $(LIBDIR); \
+	fi;
+	@@ if [ ! -d $(CONFDIR) ] ; then \
+		echo "creating directory $(CONFDIR)"; \
+		echo "$(INSTALL) -d -o  $(OWNER) -g $(GROUP) -m $(DIRMODE) $(CONFDIR)"; \
+		$(INSTALL) -d -o  $(OWNER) -g $(GROUP) -m $(DIRMODE) $(CONFDIR); \
+	fi;
+		$(INSTALL) -C -o $(OWNER) -g $(GROUP) -m $(LIBMODE) $(PROG) $(LIBDIR); 
+		$(INSTALL) -C -o $(OWNER) -g $(GROUP) -m $(CONFMODE) $(CONF) $(CONFDIR); 
+

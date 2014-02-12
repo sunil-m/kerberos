@@ -1,0 +1,12 @@
+kerberos_auth.cc
+    This file consists of routines for both client and server to negotiate token exchange and get principle.
+
+constants.cc
+    This file contains code to read the configuration file (mysql_kerb.conf) and contains various defaults and tokens used.
+mysql_kerb.cc :
+    Actual plugin.  Whenever any user is created using the plugin, the server identifies that the user is to be authenticated via plugin.
+    So, the mysql server loads the plugin which will read the keytab file and requests the mysql client to send in the users principle.
+    The mysql server upon receiving the user principle, authenticates it and responds with success/failure message to the mysql client.
+mysql_kerb.conf
+    Configuration file which consists of keytab file for mysql, service name, timeout value and verbose mode
+

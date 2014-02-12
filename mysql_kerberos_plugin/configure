@@ -1,0 +1,11 @@
+#!/bin/bash -vx
+#
+# $Header: $
+#
+
+# Extra compiler options
+CPPFLAGS_EXTRA="-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -DMYSQL_DYNAMIC_PLUGIN"
+CFLAGS_EXTRA="-g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -mtune=generic -fno-strict-aliasing -fwrapv -shared -fPIC" 
+LIBS_EXTRA=" -lgssapi_krb5 "
+
+sed "s|@@CPPFLAGS_EXTRA@@|$CPPFLAGS_EXTRA|g; s|@@CFLAGS_EXTRA@@|$CFLAGS_EXTRA|g; s|@@LIBS_EXTRA@@|$LIBS_EXTRA|g; s|@@LDFLAGS_EXTRA@@|$LDFLAGS_EXTRA|g" Makefile.in > Makefile
